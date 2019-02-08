@@ -23,15 +23,16 @@ class Cortez{
     // read products
     function read(){
  
-        // select all query
         $query = "SELECT
                ID_cortez, total_efectivo, total_pos, total_compras, fechatiempo
             FROM
                 " . $this->table_name . " p
+            WHERE
+                date(fechatiempo) = '" . date("Y-m-d") . "'
             ORDER BY
                 ID_cortez DESC
             LIMIT
-                3";
+                1";
 
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -117,29 +118,26 @@ function update(){
     $query = "UPDATE
                 " . $this->table_name . "
             SET
-                name = :name,
-                price = :price,
-                description = :description,
-                category_id = :category_id
+                total_efectivo=:total_efectivo,
+                total_pos=:total_pos,
+                total_compras=:total_compras
             WHERE
-                id = :id";
+                ID_cortez=:ID_cortez";
  
     // prepare query statement
     $stmt = $this->conn->prepare($query);
  
     // sanitize
-    $this->name=htmlspecialchars(strip_tags($this->name));
-    $this->price=htmlspecialchars(strip_tags($this->price));
-    $this->description=htmlspecialchars(strip_tags($this->description));
-    $this->category_id=htmlspecialchars(strip_tags($this->category_id));
-    $this->id=htmlspecialchars(strip_tags($this->id));
+    $this->total_efectivo=htmlspecialchars(strip_tags($this->total_efectivo));
+    $this->total_pos=htmlspecialchars(strip_tags($this->total_pos));
+    $this->total_compras=htmlspecialchars(strip_tags($this->total_compras));
+    $this->ID_cortez=htmlspecialchars(strip_tags($this->ID_cortez));
  
     // bind new values
-    $stmt->bindParam(':name', $this->name);
-    $stmt->bindParam(':price', $this->price);
-    $stmt->bindParam(':description', $this->description);
-    $stmt->bindParam(':category_id', $this->category_id);
-    $stmt->bindParam(':id', $this->id);
+    $stmt->bindParam(':total_efectivo', $this->total_efectivo);
+    $stmt->bindParam(':total_pos', $this->total_pos);
+    $stmt->bindParam(':total_compras', $this->total_compras);
+    $stmt->bindParam(':ID_cortez', $this->ID_cortez);
  
     // execute the query
     if($stmt->execute()){
